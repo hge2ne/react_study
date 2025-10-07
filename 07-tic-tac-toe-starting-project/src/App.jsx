@@ -4,12 +4,16 @@ import { useState } from "react";
 import Log from "./components/Log";
 import { WINNING_COMBINATIONS } from "./components/winning-combinations";
 
+const initialGameBoard = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
+
 /**
  * @diriverActivePlayer : 헬퍼 함수 생성 
  * App 함수 밖에 생성하는 이유 ? 컴포넌트와 관련된 상태, 데이터에 접근할 필요 없음
  */ 
-
-
 
 function deriverActivePlayer(gameTurns) {
   let currentPlayer = 'X';
@@ -20,15 +24,28 @@ function deriverActivePlayer(gameTurns) {
     };
 
     return currentPlayer;
-
 }
 
+
+
 function App() {
-  const [gameTurns, setGameTurns]=useState([]); // 버튼 하나 클릭할 때마다 배열에 순서를 하나씩 추가
-  //const [activePlayer, setActivePlayer]  = useState('X'); // 추가 상태를 제어하지 않도록 주석처리
-  // 리액트 핵심 : 상태는 최대한 적게 사용하되, 최대한 많은 값을 파생 및 연산하도록 하는 것
-/* handleSelectSquare() : Player.jsx에서 만들어진. 사용자가 선택한 칸의 정보를 가져오는 함수 */
+  const [gameTurns, setGameTurns]=useState([]);
   const activePlayer = deriverActivePlayer(gameTurns);
+
+ let gameBoard = initialGameBoard; 
+ 
+  for (const turn of gameTurns) { // 루프 안에서 이미 나온 차례에 대한 정보 추출함
+    const {square,player} = turn;
+    const {row,col} = square // 객체 구조 분해할당을 2번 실행
+
+    gameBoard[row][col]= player; 
+  }
+
+  //for문 역할 : 매 차례마다 모든 우승 조합 검토
+  for (const combination of WINNING_COMBINATIONS) {
+    const firstSquareSymbol= gameBoard[combination[0].row][combination[0].column]
+    const secondSquareSymbol= gameBoard[combination[1].row][combination[1].column]
+    const thirdSquareSymbol= gameBoard[combination[2].row][combination[2].column]
 
   function handleSelectSquare(rowIndex,colIndex){ // 어떤 행,어떤 열의 버튼을 눌렀는지 정보 받기위해 인자 rowIndex, colIndex 추가
     //setActivePlayer((curActivePlayer) => curActivePlayer === 'X' ? 'O' : 'X');
@@ -54,7 +71,7 @@ function App() {
           <Player initailName="Player 1" symbol="X" isActive={activePlayer === 'X'}/>
           <Player initailName="Player 2" symbol="O" isActive={activePlayer === 'O'} />
         </ol>
-        <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns}/> {/* turns 속성 추가 */}
+        <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}/> {/* turns 속성 추가 */}
       </div>
       <Log turns={gameTurns} />
     </main> 
