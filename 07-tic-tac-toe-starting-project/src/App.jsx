@@ -40,12 +40,22 @@ function App() {
 
     gameBoard[row][col]= player; 
   }
-
+  let winner;
   //for문 역할 : 매 차례마다 모든 우승 조합 검토
   for (const combination of WINNING_COMBINATIONS) {
     const firstSquareSymbol= gameBoard[combination[0].row][combination[0].column]
     const secondSquareSymbol= gameBoard[combination[1].row][combination[1].column]
     const thirdSquareSymbol= gameBoard[combination[2].row][combination[2].column]
+
+    //동일한 기호인지 확인하기 위해 if문 사용
+    if (
+      firstSquareSymbol &&
+      firstSquareSymbol === secondSquareSymbol &&
+      firstSquareSymbol === thirdSquareSymbol
+    ){
+      winner = firstSquareSymbol;
+    }
+  }
 
   function handleSelectSquare(rowIndex,colIndex){ // 어떤 행,어떤 열의 버튼을 눌렀는지 정보 받기위해 인자 rowIndex, colIndex 추가
     //setActivePlayer((curActivePlayer) => curActivePlayer === 'X' ? 'O' : 'X');
@@ -71,24 +81,13 @@ function App() {
           <Player initailName="Player 1" symbol="X" isActive={activePlayer === 'X'}/>
           <Player initailName="Player 2" symbol="O" isActive={activePlayer === 'O'} />
         </ol>
+        {winner && <p>You won, {winner}!</p>} {/* 우승자가 true인지 기호는 x인지 o인지 확인 */}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}/> {/* turns 속성 추가 */}
       </div>
       <Log turns={gameTurns} />
     </main> 
   );
 }
-// asdfasdfasdf
-/*
-asefas
-asdfa
-dfasd
-fasdf
-*/
-
-/**
- * docs 문서작성
- */
-
 
 
 export default App;
