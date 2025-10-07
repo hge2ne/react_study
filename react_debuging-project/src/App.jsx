@@ -16,7 +16,7 @@ function App() {
     setUserInput((prevUserInput) => {
       return {
         ...prevUserInput,
-        [inputIdentifier]: newValue,
+        [inputIdentifier]: +newValue, // 이 값이 사용되기 전에 Int 변환 필요 (+ 추가)
       };
     });
   }
