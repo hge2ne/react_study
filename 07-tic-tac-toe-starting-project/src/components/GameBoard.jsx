@@ -6,7 +6,7 @@ const initialGameBoard = [
 ];
 
 export default function GameBoard({onSelectSquare, activePlayerSymbol}) {
-  const [gameBoard, setGameBoard] = useState(initialGameBoard); 
+ /*  const [gameBoard, setGameBoard] = useState(initialGameBoard); 
 
   function handleSelectSquare(rowIndex, colIndex) {
    
@@ -17,7 +17,7 @@ export default function GameBoard({onSelectSquare, activePlayerSymbol}) {
     });
 
     onSelectSquare(); // 여기를 호출해야 플레이어가 X <-> O 로 바뀜
-  }
+  } */
 
   return (
     <ol id="game-board">

@@ -1,13 +1,16 @@
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import { useState } from "react"; 
+import Log from "./components/Log"; // 
 
 
 function App() {
+  const [gameTurns, setGameTurns]=useState([]); // 버튼 하나 클릭할 때마다 배열에 순서를 하나씩 추가
   const [activePlayer, setActivePlayer]  = useState('X'); //player1 상태
 /* handleSelectSquare() : Player.jsx에서 만들어진. 사용자가 선택한 칸의 정보를 가져오는 함수 */
-  function handleSelectSquare(){ 
+  function handleSelectSquare(){ // Log 기능 구현할떄 재사용
     setActivePlayer((curActivePlayer) => curActivePlayer === 'X' ? 'O' : 'X');
+    setGameTurns();
   }
 
   return (
@@ -19,6 +22,7 @@ function App() {
         </ol>
         <GameBoard onSelectSquare={handleSelectSquare} activePlayerSymbol={activePlayer}/>
       </div>
+      <Log />
     </main> 
   );
 }

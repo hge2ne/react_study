@@ -122,3 +122,5 @@ function handleSelectSquare(rowIndex, colIndex) {
 3.  **컴포넌트 분리**: `Log` 컴포넌트를 새로 만들어 플레이어의 턴 기록을 표시하는 기능을 분리하면 `App` 컴포넌트의 책임을 덜 수 있습니다.
 
 이상으로 현재까지의 작업 내용에 대한 분석을 마칩니다.
+
+
