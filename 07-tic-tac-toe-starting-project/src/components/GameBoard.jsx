@@ -34,8 +34,7 @@ export default function GameBoard({onSelectSquare, turns}) { // turns 속성 : �
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={()=>onSelectSquare(rowIndex,colIndex)}disabled => {playerSymbol !== null}</li>> {/* disabled 비활성화 속성 추가(버튼 컴포넌트 기본 제공기능)
-                해결방법 : 함수를 onClick으로 보내기(onSelectSquare 의 실행에 대한 통제권 얻음)*/}
+                <button onClick={()=>onSelectSquare(rowIndex,colIndex)}disabled ={playerSymbol !== null}> {/* disabled 비활성화 속성 추가(버튼 컴포넌트 기본 제공기능)
                 {/*
                 onSelectSquare 함수에 인수 추가
                 행에 대한 rowIndex, 열에 대한 colIndex 을 인수로 보냄

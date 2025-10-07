@@ -6,8 +6,9 @@ import Log from "./components/Log";
 /**
  * @diriverActivePlayer : 헬퍼 함수 생성 
  * App 함수 밖에 생성하는 이유 ? 컴포넌트와 관련된 상태, 데이터에 접근할 필요 없음
- * 
- *   */ 
+ */ 
+
+
 
 function deriverActivePlayer(gameTurns) {
   let currentPlayer = 'X';
