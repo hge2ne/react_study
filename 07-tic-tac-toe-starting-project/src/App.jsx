@@ -8,9 +8,26 @@ function App() {
   const [gameTurns, setGameTurns]=useState([]); // 버튼 하나 클릭할 때마다 배열에 순서를 하나씩 추가
   const [activePlayer, setActivePlayer]  = useState('X'); //player1 상태
 /* handleSelectSquare() : Player.jsx에서 만들어진. 사용자가 선택한 칸의 정보를 가져오는 함수 */
-  function handleSelectSquare(){ // Log 기능 구현할떄 재사용
+  function handleSelectSquare(rowIndex,colIndex){ // 어떤 행,어떤 열의 버튼을 눌렀는지 정보 받기위해 인자 rowIndex, colIndex 추가
     setActivePlayer((curActivePlayer) => curActivePlayer === 'X' ? 'O' : 'X');
-    setGameTurns();
+    /**
+     * @setGameTurns 
+     * 역할: 상태를 불변한 방식으로 업데이트하고 다른 상태를 병합하지 않도록 해줌
+
+     */
+    setGameTurns(prevTurns => { //게임에 사용된 수에 대한 배열 사용해야하지만 이미 생성된 수 prevTurns가 있으므로 이거 사용
+      let currentPlayer = 'X';
+
+      if (PrevTurns.lengh > 0 && prevTurns[0].player === 'X') { //이전 턴이 기호 X 플레이어의 턴이었다면? 그 다름 차례는 기호 O 플레이어 차례
+        // PrevTurns.lengh > 0 : 이전 턴이 존재하지 않는 경우 처리
+        currentPlayer = 'O';
+      };
+
+      const updatedTurns = [{square: {row: rowIndex, col: colIndex},player:currentPlayer},...prevTurns]; //주의: 불별하는 방식으로 해야함
+      //{}부분 중첩객체 표현(행을 rowIndex와 대응, 열을 colIndex와 대응)
+      // 어떤 버튼 눌렀는지 확인하기 위해 player 속성 추가(activePlayer 사용하여 현재 진행중인 플레이어 기호 저장 )
+      return updatedTurns; // setGameTurns 상태의 새로운 값으로 반환됨
+    });
   }
 
   return (
