@@ -56,7 +56,7 @@ function App() {
       firstSquareSymbol === secondSquareSymbol &&
       firstSquareSymbol === thirdSquareSymbol
     ){
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol];
     }
   }
   // 무승부로 게임이 끝날 경우 처리
@@ -96,8 +96,13 @@ function handlePlayerNameChange(symbol,newName) {
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player"> {/* css 추가 */}
-          <Player initailName="Player 1" symbol="X" isActive={activePlayer === 'X'}/>
-          <Player initailName="Player 2" symbol="O" isActive={activePlayer === 'O'} />
+          <Player initailName="Player 1" symbol="X" isActive={activePlayer === 'X'}
+          onChangeName={handlePlayerNameChange}
+          />
+          <Player initailName="Player 2" symbol="O" isActive={activePlayer === 'O'} 
+          onChangeName={handlePlayerNameChange}
+          
+          />
         </ol>
         {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart}/>} {/* 우승자가 true인지 기호는 x인지 o인지 확인 */}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}/> {/* turns 속성 추가 */}
