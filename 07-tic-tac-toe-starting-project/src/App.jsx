@@ -33,7 +33,7 @@ function App() {
   const [gameTurns, setGameTurns]=useState([]);
   const activePlayer = deriverActivePlayer(gameTurns);
 
- let gameBoard = initialGameBoard; 
+ let gameBoard = [...initialGameBoard.map(array=>[...array])]; // 게임리셋 시, 게임판 초기화하는 방법 (깊은 복사)
  
   for (const turn of gameTurns) { // 루프 안에서 이미 나온 차례에 대한 정보 추출함
     const {square,player} = turn;
@@ -77,7 +77,9 @@ function App() {
       return updatedTurns; // setGameTurns 상태의 새로운 값으로 반환됨
     });
   }
-
+  function handleRestart(){
+    setGameTurns([]);
+  }
   return (
     <main>
       <div id="game-container">
@@ -85,7 +87,7 @@ function App() {
           <Player initailName="Player 1" symbol="X" isActive={activePlayer === 'X'}/>
           <Player initailName="Player 2" symbol="O" isActive={activePlayer === 'O'} />
         </ol>
-        {(winner || hasDraw) && <GameOver winner={winner}/>} {/* 우승자가 true인지 기호는 x인지 o인지 확인 */}
+        {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart}/>} {/* 우승자가 true인지 기호는 x인지 o인지 확인 */}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}/> {/* turns 속성 추가 */}
       </div>
       <Log turns={gameTurns} />
