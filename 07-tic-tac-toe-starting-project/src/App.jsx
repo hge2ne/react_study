@@ -5,7 +5,12 @@ import Log from "./components/Log";
 import { WINNING_COMBINATIONS } from "./components/winning-combinations";
 import GameOver from "./components/GameOver";
 
-const initialGameBoard = [
+const PLAYERS = { //상수 형식 : 단어들이 밑줄로 구분된 스타일(이 앺을 위해 정의된 일반 상수라는 것을 나타냄)
+  X: 'Player 1',
+  O: 'Player 2'
+}
+
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
@@ -27,22 +32,7 @@ function deriverActivePlayer(gameTurns) {
     return currentPlayer;
 }
 
-function App() {
-  const [players,setPlayers] = useState({
-    X: 'Player1',
-    O: 'Player2'
-  })
-  const [gameTurns, setGameTurns]=useState([]);
-  const activePlayer = deriverActivePlayer(gameTurns);
-
- let gameBoard = [...initialGameBoard.map(array=>[...array])]; // 게임리셋 시, 게임판 초기화하는 방법 (깊은 복사)
- 
-  for (const turn of gameTurns) { // 루프 안에서 이미 나온 차례에 대한 정보 추출함
-    const {square,player} = turn;
-    const {row,col} = square // 객체 구조 분해할당을 2번 실행
-
-    gameBoard[row][col]= player; 
-  }
+function deriveWinner(gameBoard, players){
   let winner;
   //for문 역할 : 매 차례마다 모든 우승 조합 검토
   for (const combination of WINNING_COMBINATIONS) {
@@ -59,6 +49,28 @@ function App() {
       winner = players[firstSquareSymbol];
     }
   }
+  return winner;
+}
+
+function deriveGameBoard(gameTurns,){
+  let gameBoard = [...INITIAL_GAME_BOARD.map(array=>[...array])]; // 게임리셋 시, 게임판 초기화하는 방법 (깊은 복사)
+ 
+  for (const turn of gameTurns) { // 루프 안에서 이미 나온 차례에 대한 정보 추출함
+    const {square,player} = turn;
+    const {row,col} = square // 객체 구조 분해할당을 2번 실행
+
+    gameBoard[row][col]= player; 
+  }
+  return gameBoard;
+}
+
+function App() {
+  const [players,setPlayers] = useState(PLAYERS)
+  const [gameTurns, setGameTurns]=useState([]);
+  const activePlayer = deriverActivePlayer(gameTurns);
+  const gameBoard = deriveGameBoard(gameTurns);
+  const winner = deriveWinner(gameBoard,players);
+  
   // 무승부로 게임이 끝날 경우 처리
   const hasDraw = gameTurns.length === 9 && !winner;
 
@@ -96,10 +108,10 @@ function handlePlayerNameChange(symbol,newName) {
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player"> {/* css 추가 */}
-          <Player initailName="Player 1" symbol="X" isActive={activePlayer === 'X'}
+          <Player initailName={PLAYERS.X} symbol="X" isActive={activePlayer === 'X'}
           onChangeName={handlePlayerNameChange}
           />
-          <Player initailName="Player 2" symbol="O" isActive={activePlayer === 'O'} 
+          <Player initailName={PLAYERS.O}  symbol="O" isActive={activePlayer === 'O'} 
           onChangeName={handlePlayerNameChange}
           
           />
