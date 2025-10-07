@@ -2,6 +2,7 @@ import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import { useState } from "react"; 
 import Log from "./components/Log";
+import { WINNING_COMBINATIONS } from "./components/winning-combinations";
 
 /**
  * @diriverActivePlayer : 헬퍼 함수 생성 
