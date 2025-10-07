@@ -18,7 +18,7 @@ function App() {
     setGameTurns(prevTurns => { //게임에 사용된 수에 대한 배열 사용해야하지만 이미 생성된 수 prevTurns가 있으므로 이거 사용
       let currentPlayer = 'X';
 
-      if (PrevTurns.lengh > 0 && prevTurns[0].player === 'X') { //이전 턴이 기호 X 플레이어의 턴이었다면? 그 다름 차례는 기호 O 플레이어 차례
+      if (prevTurns.lengh > 0 && prevTurns[0].player === 'X') { //이전 턴이 기호 X 플레이어의 턴이었다면? 그 다름 차례는 기호 O 플레이어 차례
         // PrevTurns.lengh > 0 : 이전 턴이 존재하지 않는 경우 처리
         currentPlayer = 'O';
       };
@@ -39,7 +39,7 @@ function App() {
         </ol>
         <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns}/> {/* turns 속성 추가 */}
       </div>
-      <Log />
+      <Log turns={gameTurns} />
     </main> 
   );
 }
