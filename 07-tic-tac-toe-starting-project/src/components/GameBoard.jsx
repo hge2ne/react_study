@@ -5,7 +5,15 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-export default function GameBoard({onSelectSquare, activePlayerSymbol}) {
+export default function GameBoard({onSelectSquare, turns}) { // turns 속성 : 배열임
+  let gameBoard = initialGameBoard; 
+ 
+  for (const turn of turns) { // 루프 안에서 이미 나온 차례에 대한 정보 추출함
+    const {square,player} = turn;
+    const {row,col} = square // 객체 구조 분해할당을 2번 실행
+
+    gameBoard[row][col]= player; //gameBoard 컴포 넌트의 파생상태(gameTurns 상태에 기반해서)
+  }
  /*  const [gameBoard, setGameBoard] = useState(initialGameBoard); 
 
   function handleSelectSquare(rowIndex, colIndex) {
@@ -26,12 +34,18 @@ export default function GameBoard({onSelectSquare, activePlayerSymbol}) {
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() => handleSelectSquare(rowIndex, colIndex)}>
+                <button onClick={()=>onSelectSquare(rowIndex,colIndex)}> {/* onCLick: 어떤 행, 어떤 열에 있는 버튼을 클릭했는지에 대한 정보 가져오지 않음
+                해결방법 : 함수를 onClick으로 보내기(onSelectSquare 의 실행에 대한 통제권 얻음)*/}
+                {/*
+                onSelectSquare 함수에 인수 추가
+                행에 대한 rowIndex, 열에 대한 colIndex 을 인수로 보냄
+                함수로 보내는 이유? 이것이 onSelectSquare의 속성값이기 때문
+                */}
                   {playerSymbol}
                 </button>
               </li>
             ))}
-          </ol>
+          </ol> 
         </li>
       ))}
     </ol>
