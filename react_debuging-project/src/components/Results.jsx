@@ -1,8 +1,12 @@
 import { calculateInvestmentResults, formatter } from '../util/investment.js';
 
 
+
+
 export default function Results({ input }) {
-  const results = [];
+  const results = []; // 오류 원인(함수 밖에 위치하면 안됨). 디버깅 해보기
+/* 오류 원인 : 해당 리스트 내부에서 key 속성을 가진 요소들을 출력하고 있기 때문
+=> 리스트가 입력값이 수정됨에 따라 삭제되고 대체되는 것이 아니라 계속 추가됨  */
   calculateInvestmentResults(input, results);
 
   if(results.length === 0) {
