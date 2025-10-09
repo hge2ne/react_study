@@ -16,8 +16,11 @@ export default function Player() {
   }
 
   function handleClick() {
-    setEnteredPlayerName(playerName.current.value); //playerName : js 객체이며 항상 current 속성 가지고 있음
-    //current 속성 : 실제 참조값 가지고있음(연결된 input 저장됨)
+    setEnteredPlayerName(playerName.current.value);
+    playerName.current.value = "";
+    /* 위 코드 : input의 값을 빈 문자열로 설정하라고 명령하고 있음. 리액트는 선언식임. (리액트 규칙; DOM 상호작용은 리액트가 해야함)
+
+    */
 
     // 아래 버튼과 연결
     setSubmitted(true); // true 로 상태 바뀌면
@@ -38,3 +41,19 @@ export default function Player() {
     </section>
   );
 }
+/* 참조 기능을 html 요소와 연결하지 않고 사용하는 법
+
+
+
+참조 vs 상태 (차이점) 
+
+state (상태): 
+- 상태 업데이트 함수를 통해 변화가 있을 경우 컴포넌트 재실행됨
+- 사용하는 경우 : 상태값은 컴포넌트 재실행을 발생시키므로 UI 에 바로 반영되어야 하는 값에 사용
+- 사용하지 않는 경우 : 시스템 내부에 보이지 않는 쪽에서 다루는 값 혹은 UI에 직접적인 영향을 끼치지 않는 값에 사용하지 않음
+
+
+refs (참조):
+- 참조값이 바뀌어도 컴포넌트 재실행되지 않음
+- 사용하는 경우: DOM 요소에 직접적인 접근 필요할 때 사용, 현재 input 필드에 입력되는 값 받아오기
+*/
