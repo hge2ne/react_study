@@ -1,17 +1,19 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 
 const ResultModal = forwardRef(function ResultModal({
-  result,
+  remainingTime,
   targetTime,
   ref,
 }) {
-    useImperativeHandle(ref, () => {
+  useImperativeHandle(ref, () => {
     return {
       open() {
         dialog.current.showModal();
       },
     };
   });
+  // forwardRef 와 useImperativeHandle 덕분에 객체(dialog)와의 연결이 구현된 것
+  //{dialog}의 객체를 TimerChallenge.jsx에서 ResultModal이 받음
 
   return (
     <dialog ref={dialog} className="result-modal" open>
