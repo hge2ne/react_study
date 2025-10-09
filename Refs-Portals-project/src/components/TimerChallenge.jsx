@@ -15,7 +15,7 @@ export default function TimerChallenge({ title, targetTime }) {
     // 타이머 함수
     timer.current = setTimeout(() => {
       setTimerExpired(true);
-      dialog.current.showModal(); // showModal(): 표준 브라우저 기능
+      dialog.current.open();
     }, targetTime * 1000);
     setTimerExpired(true);
   }
