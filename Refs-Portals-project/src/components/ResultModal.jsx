@@ -1,10 +1,14 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 
-const ResultModal = forwardRef(function ResultModal({
-  remainingTime,
-  targetTime,
-  ref,
-}) {
+const ResultModal = forwardRef(function ResultModal(
+  { remainingTime, targetTime, remainingTime }, // ramainingTime 추가 (사용자가 패배했는지 확인하거나, 점수계산 시 활용)
+  ref
+) {
+  const dialog = useRef();
+  const userLost = remainingTime <= 0; // 이 상수가 True인 경우는 remainingTime이 0이거나, 0보다 작을 때
+  const formattedRemainingTime = (remainingTime / 1000).toFixed(2); //상수 선언
+  // toFixed : java 내장방식(소수점 2자리수까지만 표시)
+
   useImperativeHandle(ref, () => {
     return {
       open() {
@@ -17,7 +21,9 @@ const ResultModal = forwardRef(function ResultModal({
 
   return (
     <dialog ref={dialog} className="result-modal" open>
-      {" "}
+      <p>
+        You stopped the timer with<strong>{formattedRemainingTime}</strong>
+      </p>{" "}
       {/* 이 내장 dialog 요소가 기본적으로 눈에 보이지 않음(open 속성 추가해서 해결) 
       만약 모달창을 반투명하게 하는 효과 등을 사용하려면 open 속성 말고, 참고 기능 활용해야함
       refs 로 dialog 접근하기
@@ -31,7 +37,7 @@ const ResultModal = forwardRef(function ResultModal({
       
       
       */}
-      <h2>You {result}</h2>
+      {userLost && <h2>You lost</h2>} {/* userLost가 True일때 보여지는 <h2> */}
       <p>
         The tatget time was <strong>{targetTime} seconds.</strong>
       </p>
