@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
+import { createPortal } from "react-dom";
 
 const ResultModal = forwardRef(function ResultModal(
   { remainingTime, targetTime, remainingTime }, // ramainingTime 추가 (사용자가 패배했는지 확인하거나, 점수계산 시 활용)
@@ -21,7 +22,8 @@ const ResultModal = forwardRef(function ResultModal(
   // forwardRef 와 useImperativeHandle 덕분에 객체(dialog)와의 연결이 구현된 것
   //{dialog}의 객체를 TimerChallenge.jsx에서 ResultModal이 받음
 
-  return (
+  return createPortal(
+    //createPortal() 사용해서 똑같은 리액트 앱의 출력 위치를 다르게 설정
     <dialog ref={dialog} className="result-modal">
       {userLost && <h2>You lost</h2>}
       {!userLost && <h2>Your Score:{score}</h2>}
@@ -52,7 +54,8 @@ const ResultModal = forwardRef(function ResultModal(
         {" "}
         <button>Close</button>
       </form>
-    </dialog>
+    </dialog>,
+    document.getElementById("modal") // 기본 브라우저 API
   );
 });
 
