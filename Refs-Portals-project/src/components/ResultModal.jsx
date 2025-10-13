@@ -8,6 +8,8 @@ const ResultModal = forwardRef(function ResultModal(
   const userLost = remainingTime <= 0; // 이 상수가 True인 경우는 remainingTime이 0이거나, 0보다 작을 때
   const formattedRemainingTime = (remainingTime / 1000).toFixed(2); //상수 선언
   // toFixed : java 내장방식(소수점 2자리수까지만 표시)
+  const score = Math.round((1 - (remainingTime / targetTime) * 1000) * 100);
+  //Math.round() : 반올림
 
   useImperativeHandle(ref, () => {
     return {
@@ -20,7 +22,9 @@ const ResultModal = forwardRef(function ResultModal(
   //{dialog}의 객체를 TimerChallenge.jsx에서 ResultModal이 받음
 
   return (
-    <dialog ref={dialog} className="result-modal" open>
+    <dialog ref={dialog} className="result-modal">
+      {userLost && <h2>You lost</h2>}
+      {!userLost && <h2>Your Score:{score}</h2>}
       <p>
         You stopped the timer with<strong>{formattedRemainingTime}</strong>
       </p>{" "}

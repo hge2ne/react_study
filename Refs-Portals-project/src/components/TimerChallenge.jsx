@@ -4,7 +4,12 @@ import ResultModal from "./ResultModal.jsx";
 // 위 변수는 함수 안에 있으면 안됨. 함수 안에 있으면 컴포넌트 재실행시마다 재선언되기 때문
 // 함수 사용하면 각 타이머 분리 안됨 (참조로 해결하기)
 // 참조 기능 활용: 값을 제어하기 위해 사용
-export default function TimerChallenge({ title, targetTime, onSubmit }) {
+export default function TimerChallenge({
+  title,
+  targetTime,
+  remainingTime,
+  onSubmit,
+}) {
   const timer = useRef();
   const dialog = useRef();
   const userLost = remainingTime <= 0;
