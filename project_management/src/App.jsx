@@ -22,12 +22,33 @@ function App() {
     });
   }
 
+  function handleAddProject(projectData) {
+    setProjectsState((prevState) => {
+      const newProject = {
+        ...projectData,
+        id: Math.random(), //: js 내장함수. id에 해당하는 값 랜덤생성해줌
+      };
+      return {
+        ...prevState,
+        projects: [...prevState.projects, newProject],
+      };
+    });
+  }
+
+  console.log(projectsState); //프로젝트 상태를 로그로 출력
+  /* 
+  시간이 지나면서 프로젝트 목록이 어떻게 변하는지 확인 가능
+  1. 처음엔 빈배열 출력
+  2. create new project 버튼 누르면 빈배열 출력
+  3. 입력란 채우고 save 버튼 누르면 "입력데이터" 가 포함된 배열 출력
+  */
+
   let content;
 
   if (projectsState.selectedProjectId === null) {
     //projectsState.selectedProjectedId 가 null 상태 : 사용자가 버튼을 눌러서 초기값이 null 로 변경된 상태
 
-    content = <NewProject />; // content 상태를 컴포넌트로 가정
+    content = <NewProject onAdd={handleAddProject} />; // content 상태를 컴포넌트로 가정
   } else if (projectsState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
     {
