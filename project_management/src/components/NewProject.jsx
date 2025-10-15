@@ -1,6 +1,6 @@
 import Input from "./input";
-import Input from "../Input.jsx";
 import { useReducer } from "react";
+import { useRef } from "react";
 
 export default function NewProject({ onAdd }) {
   const title = useRef();
@@ -37,9 +37,9 @@ export default function NewProject({ onAdd }) {
         </li>
       </menu>
       <div>
-        <Input ref={title} label="title" />
+        <Input type="text" ref={title} label="title" />
         <Input ref={description} label="Description" textarea={true} />
-        <Input ref={dueDate} label="Due Date" />
+        <Input type="date" ref={dueDate} label="Due Date" />
         {/* 
         (주의) Input 커스텀 컴포넌트임. 내장 html 아님
         => ref를 일반 프로터티처럼 사용하는 대신 Input 컴포넌트 파일로 가서 이 컴포넌트를 fowardRef로 감싸기

@@ -24,18 +24,20 @@ function App() {
 
   function handleAddProject(projectData) {
     setProjectsState((prevState) => {
+      const projectId = Math.random();
       const newProject = {
         ...projectData,
         id: Math.random(), //: js 내장함수. id에 해당하는 값 랜덤생성해줌
       };
       return {
         ...prevState,
+        selectedProjectId: undefined,
         projects: [...prevState.projects, newProject],
       };
     });
   }
 
-  console.log(projectsState); //프로젝트 상태를 로그로 출력
+  //console.log(projectsState); 프로젝트 상태를 로그로 출력
   /* 
   시간이 지나면서 프로젝트 목록이 어떻게 변하는지 확인 가능
   1. 처음엔 빈배열 출력
@@ -60,7 +62,10 @@ function App() {
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectsSidebar onStartAddProject={handleStartAddProject} />
+      <ProjectsSidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectsState.projects} //projectsState.projects: 모든 프로젝트에 대한 배열(ProjectsSidebar 컴포넌트에 있는 project 속성으로 넘겨야함)
+      />
       {content}
     </main>
   );
