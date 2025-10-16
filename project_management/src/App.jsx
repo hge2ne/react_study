@@ -23,6 +23,29 @@ function App() {
     });
   }
 
+  /**
+   * @handleDeleteProject : 생성 프로젝트 삭제 기능
+   * filter(): js 내장함수
+   * 특징 : 함수를 입력값으로 받음
+   * 상태 유지하는 경우 True
+   * 삭제하는 경우 False
+   * 선택된 프로젝트가 project.id와 일치하지 않는면 ? 삭제 항목 아님(True)
+   * 선택된 프로젝트 id 일치 => 프로젝트 삭제(False)
+   */
+
+  function handleDeleteProject() {
+    //주의 id 속성 필요없음 prevState에 selectedProjectId 속성 있기 때문
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: prevState.projects.filter(
+          (project) => project.id !== prevState.selectedProjectId
+        ),
+      };
+    });
+  }
+
   //handleStartAddProject : 버튼 중 하나를 클릭해 새로운 프로젝트를 만들때 실행됨
 
   function handleStartAddProject() {
@@ -77,7 +100,9 @@ function App() {
   );
   // find() : js 내장 메서드(함수를 인수로 가짐;반환한다는 뜻)
 
-  let content = <SelectedProject project={selectedProject} />;
+  let content = (
+    <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
+  );
   /* 
   project 속성을 기존에 선택된 프로젝트로 설정되도록 함
   우리가 원하는 요소가 나왔을 때 함수가 True 됨
