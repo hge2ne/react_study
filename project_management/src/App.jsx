@@ -2,12 +2,27 @@ import ProjectsSidebar from "./components/ProjectsSidebar";
 import NewProject from "./components/NewProject";
 import NoProjectSelected from "./components/NoProjectSelected";
 import { useState } from "react";
+import SelectedProject from "./components/SelectedProject";
 
 function App() {
   const [projectsState, setProjectsState] = useState({
     selectedProjectId: undefined, //(주의) null 아님. 나중에 프로젝트가 여러개 있을 때 그중 선택된 프로젝트의 ID 저장
     projects: [],
   });
+
+  /**
+   *@handleSelectProject : 생성된 프로젝트 생성하는 기능
+   */
+
+  function handleSelectProject(id) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: null,
+      };
+    });
+  }
+
   //handleStartAddProject : 버튼 중 하나를 클릭해 새로운 프로젝트를 만들때 실행됨
 
   function handleStartAddProject() {
@@ -57,7 +72,19 @@ function App() {
   3. 입력란 채우고 save 버튼 누르면 "입력데이터" 가 포함된 배열 출력
   */
 
-  let content;
+  const selectedProject = projectsState.projects.find(
+    (project) => project.id === projectsState.selectedProjectId
+  );
+  // find() : js 내장 메서드(함수를 인수로 가짐;반환한다는 뜻)
+
+  let content = <SelectedProject project={selectedProject} />;
+  /* 
+  project 속성을 기존에 선택된 프로젝트로 설정되도록 함
+  우리가 원하는 요소가 나왔을 때 함수가 True 됨
+  -> find 는 그 요소를 반환함
+  -> 찾은 요소가 상수 SelectedProject 에 저장됨
+  project 속성으로 <SelectedProject/> 로 값 전달
+  */
 
   if (projectsState.selectedProjectId === null) {
     //projectsState.selectedProjectedId 가 null 상태 : 사용자가 버튼을 눌러서 초기값이 null 로 변경된 상태
@@ -77,6 +104,7 @@ function App() {
   return (
     <main className="h-screen my-8 flex gap-8">
       <ProjectsSidebar
+        onSelectProject={handleSelectProject} //여기 추가된 속성들은 ProjectSiderbar 컴포넌트의 prop으로 전달됨
         onStartAddProject={handleStartAddProject}
         onCancle={handleCancleAddProject}
         projects={projectsState.projects} //projectsState.projects: 모든 프로젝트에 대한 배열(ProjectsSidebar 컴포넌트에 있는 project 속성으로 넘겨야함)
