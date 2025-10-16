@@ -11,6 +11,29 @@ function App() {
   });
 
   /**
+   * @handleAddTask : 할일 추가
+   * text: 할일을 입력값으로 가정
+   */
+  function handleAddTask(text) {}
+  setProjectsState((prevState) => {
+    const tasktId = Math.random();
+    const newTask = {
+      text: text,
+      projectId: prevState.selectedProjectId, // 프로젝트가 선택되어야만 할일 추가할수있으므로 속성 가져옴
+      id: taskId,
+    };
+    return {
+      ...prevState,
+      tasks: [newTask, ...prevState.tasks],
+    };
+  });
+  /**
+   * @handleDeleteTask : 할일 삭제
+   */
+
+  function handleDeleteTask() {}
+
+  /**
    *@handleSelectProject : 생성된 프로젝트 생성하는 기능
    */
 
@@ -101,7 +124,13 @@ function App() {
   // find() : js 내장 메서드(함수를 인수로 가짐;반환한다는 뜻)
 
   let content = (
-    <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
+    <SelectedProject
+      project={selectedProject}
+      onDelete={handleDeleteProject}
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+      tasks={projectsState.tasks}
+    />
   );
   /* 
   project 속성을 기존에 선택된 프로젝트로 설정되도록 함

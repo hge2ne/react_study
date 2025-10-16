@@ -1,6 +1,16 @@
 import Tasks from "./Tasks";
 
+<<<<<<< HEAD
 export default function SelectedProject({ project, onDelete }) {
+=======
+export default function SelectedProject({
+  project,
+  onDelete,
+  onAddTask,
+  onDeleteTask,
+  tasks,
+}) {
+>>>>>>> 24d2603 (태스크 관리 & Prop Drilling 이해하기)
   const formattedDate = new Date(project.dueDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -25,7 +35,11 @@ export default function SelectedProject({ project, onDelete }) {
           {project.description}
         </p>
       </header>
+<<<<<<< HEAD
       <Tasks></Tasks>
+=======
+      <Tasks onAdd={onAddTask} onDelete={onDeleteTask} tasks={tasks}></Tasks>
+>>>>>>> 24d2603 (태스크 관리 & Prop Drilling 이해하기)
     </div>
   );
 }
