@@ -22,6 +22,18 @@ function App() {
     });
   }
 
+  /**
+   *@handleCancleAddProject : cancle 버튼 작동 여부 제어 함수
+   */
+  function handleCancleAddProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+      };
+    });
+  }
+
   function handleAddProject(projectData) {
     setProjectsState((prevState) => {
       const projectId = Math.random();
@@ -50,7 +62,9 @@ function App() {
   if (projectsState.selectedProjectId === null) {
     //projectsState.selectedProjectedId 가 null 상태 : 사용자가 버튼을 눌러서 초기값이 null 로 변경된 상태
 
-    content = <NewProject onAdd={handleAddProject} />; // content 상태를 컴포넌트로 가정
+    content = (
+      <NewProject onAdd={handleAddProject} onCancle={handleCancleAddProject} />
+    ); // content 상태를 컴포넌트로 가정
   } else if (projectsState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
     {
@@ -64,6 +78,7 @@ function App() {
     <main className="h-screen my-8 flex gap-8">
       <ProjectsSidebar
         onStartAddProject={handleStartAddProject}
+        onCancle={handleCancleAddProject}
         projects={projectsState.projects} //projectsState.projects: 모든 프로젝트에 대한 배열(ProjectsSidebar 컴포넌트에 있는 project 속성으로 넘겨야함)
       />
       {content}

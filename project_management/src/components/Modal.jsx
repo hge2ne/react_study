@@ -2,6 +2,7 @@
 //파일이름을 errorModal이 아닌 Modal 로 하는 이유? 재사용 가능
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
+import Button from "./Button";
 
 const Modal = forwardRef(function Modal({ children, buttonCaption }, ref) {
   // 주의! ref 위치: 1번째 prop{} 안x {} 밖 2번째 prop 위치에 있어야함
@@ -14,10 +15,13 @@ const Modal = forwardRef(function Modal({ children, buttonCaption }, ref) {
     };
   });
   return createPortal(
-    <dialog ref={dialog}>
+    <dialog
+      ref={dialog}
+      className="backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
+    >
       {children}
-      <form method="dialog">
-        <button>Close</button>
+      <form method="dialog" className="mt-4 text-right">
+        <Button>{buttonCaption}</Button>
         {/* 
         모달창 닫는 버튼
         */}
