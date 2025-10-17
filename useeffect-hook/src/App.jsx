@@ -46,6 +46,20 @@ function App() {
       }
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
+      //클릭한 장소 목록을 브라우저 저장소에 저장하는 기능
+      const storedIds =
+        JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+      //if로 장소 중복 저장 방지
+      /*
+      코드 실행조건: handleSelectedPlace 함수 실행(사용자가 장소 클릭시 실행)
+      위 코드는 상태 업데이트 하지않음 => 무한루프x
+      (주의) useEffect 훅이 필요한 경우 : 무한루프 방지 해야하는 경우, 컴포넌트 최초 실행이후 작동가능한코드(시간꽤걸리는작업) 이 있는 경우
+      */
+      if (storedIds.indexOf(id))
+        localStorage.setItem(
+          "selectedPlaces",
+          JSON.stringify([id, ...storedIds])
+        );
     });
   }
 
