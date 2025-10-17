@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-
 import Places from "./components/Places.jsx";
 import { AVAILABLE_PLACES } from "./data.js";
 import Modal from "./components/Modal.jsx";
@@ -16,11 +15,11 @@ import { sortPlacesByDistance } from "./loc.js";
 
 function App() {
   const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+  const [modalIsOpen, setModalIsOpen] = useState(false); //모달이 열려있는지 여부 제어하는 state생성
   const storedPlaces = storedIds.map((id) =>
     AVAILABLE_PLACES.find((place) => place.id == id)
   );
 
-  const modal = useRef();
   const selectedPlace = useRef();
   const [pickedPlaces, setPickedPlaces] = useState([]);
   const [availablePlaces, setAvailablePlaves] = useState(storedPlaces); //여기 초기값으로 사용
@@ -43,15 +42,15 @@ function App() {
 
 */
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setModalIsOpen(true); // 저장된 장소를 삭제할지 물어보는 모달창이 열려있을때 Open() 호출하던 곳 => true 처리
+  }
+
+  function handleSelectPlace(id) {
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
-  }
-
-  function handleSelectPlace(id) {
+    setModalIsOpen(false); //모달 닫힌 상태 false 처리
     setPickedPlaces((prevPickedPlaces) => {
       if (prevPickedPlaces.some((place) => place.id === id)) {
         return prevPickedPlaces;
@@ -79,8 +78,7 @@ function App() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
-
+    setModalIsOpen(false);
     const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
     localStorage.setItem(
       "selectedPlaces",
@@ -90,7 +88,7 @@ function App() {
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={ModalIsOpen}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
