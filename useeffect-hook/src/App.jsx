@@ -6,12 +6,24 @@ import Modal from "./components/Modal.jsx";
 import DeleteConfirmation from "./components/DeleteConfirmation.jsx";
 import logoImg from "./assets/logo.png";
 import { sortPlacesByDistance } from "./loc.js";
+/*
+  - storedPlaces : localStorage에서 가져온 id 배열 기반 place 객체 배열 제공
+  - 위 useEffect 코드 : app() 실행후 1회만 실행됨
+  - 1회만 실행되는 코드는 굳이 useEffect 문법 사용할 필요없음
+  => 즉각 사용가능한 storedPlaces 를 사용해서 선택한 장소 상태 초기화에 사용
+  - 함수 밖에 배치하는 이유? storedPlaces를 상태 초기값으로 사용하기 위해 + 1회 실행되는 코드이기 때문
+  */
 
 function App() {
+  const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+  const storedPlaces = storedIds.map((id) =>
+    AVAILABLE_PLACES.find((place) => place.id == id)
+  );
+
   const modal = useRef();
   const selectedPlace = useRef();
   const [pickedPlaces, setPickedPlaces] = useState([]);
-  const [availablePlaces, setAvailablePlaves] = useState([]);
+  const [availablePlaces, setAvailablePlaves] = useState(storedPlaces); //여기 초기값으로 사용
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -68,6 +80,12 @@ function App() {
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
     modal.current.close();
+
+    const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+    localStorage.setItem(
+      "selectedPlaces",
+      JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current)) //id 일치하지않는 경우 삭제 항목 아님
+    );
   }
 
   return (
