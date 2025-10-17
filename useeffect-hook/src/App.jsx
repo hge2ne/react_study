@@ -11,6 +11,7 @@ function App() {
   const modal = useRef();
   const selectedPlace = useRef();
   const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [availablePlaces, setAvailablePlaves] = useState([]);
 
   navigator.geolocation.getCurrentPosition((position) => {
     const sortedPlaces = sortPlacesByDistance(
@@ -18,6 +19,7 @@ function App() {
       position.coords.latitude, //위도
       position.coords.longitude //경도
     );
+    setAvailablePlaves(sortedPlaces);
   });
 
   /* 
@@ -80,7 +82,7 @@ function App() {
         />
         <Places
           title="Available Places"
-          places={AVAILABLE_PLACES}
+          places={availablePlaces}
           onSelectPlace={handleSelectPlace}
         />
       </main>
