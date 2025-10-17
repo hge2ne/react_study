@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Places from "./components/Places.jsx";
 import { AVAILABLE_PLACES } from "./data.js";
@@ -13,22 +13,22 @@ function App() {
   const [pickedPlaces, setPickedPlaces] = useState([]);
   const [availablePlaces, setAvailablePlaves] = useState([]);
 
-  navigator.geolocation.getCurrentPosition((position) => {
-    const sortedPlaces = sortPlacesByDistance(
-      AVAILABLE_PLACES,
-      position.coords.latitude, //위도
-      position.coords.longitude //경도
-    );
-    setAvailablePlaves(sortedPlaces);
-  });
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const sortedPlaces = sortPlacesByDistance(
+        AVAILABLE_PLACES,
+        position.coords.latitude, //위도
+        position.coords.longitude //경도
+      );
+      setAvailablePlaves(sortedPlaces);
+    });
+  }, []);
+  /*
+위 useEffect 로 무한루프 해결되는 이유:
+- 1번째 인수인 콜백함수가 실행되는 시점 중요함
+- App() 실행되어도 위 코드는 즉시 실행되지 않음(App 컴포넌트 실행완료 후 실행됨 )
+- (주의) 의존성배열 [] 때문에 위처럼 실행순서 정해지는 것임. [] 생략하면 App 컴포넌트 렌더링될때마다 Effect 함수 재실행됨
 
-  /* 
-  - navigator : 브라우저가 해당 브라우저 내에서 구동되는 js 코드에 노출시키는 객체임(브라우저 제공 객체)
-  - 메서드 호출 시 사용자는 위치 제공 여부 요청 받음, 동의 후 위치파악 진행됨
-  - 위치파악은 시간이 걸리는 작업이므로, 파라미터로 콜백함수 입력받음
-  - (주의) 위 함수는 브라우저로부터 호출받음. 사용자 위치가 포함된 객체를 제공하는 것도 브라우저임.
-  - navigator 부터 전체 코드 : side effect임
-  - 이유: 이 코드와 사용자 위치가 이 앱에 필요하지만 App 컴포넌트의 핵심 기능 x, 즉각 실행 x, 직접적 영향 주지않기 때문
 */
   function handleStartRemovePlace(id) {
     modal.current.open();
@@ -83,6 +83,7 @@ function App() {
         <Places
           title="Available Places"
           places={availablePlaces}
+          fallbackText="Sorting places by distance..."
           onSelectPlace={handleSelectPlace}
         />
       </main>
