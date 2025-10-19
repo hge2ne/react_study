@@ -89,10 +89,15 @@ function App() {
   return (
     <>
       <Modal open={ModalIsOpen}>
-        <DeleteConfirmation
-          onCancel={handleStopRemovePlace}
-          onConfirm={handleRemovePlace}
-        />
+        {modalIsOpen && (
+          <DeleteConfirmation
+            onCancel={handleStopRemovePlace}
+            onConfirm={handleRemovePlace}
+          />
+        )}
+        {/* 
+        조건부 렌더링(모달 열린 상태가 True일 때만 렌더링 됨)
+        */}
       </Modal>
 
       <header>

@@ -29,7 +29,11 @@ const Modal = function Modal({ open, children, onClose }) {
 
   return createPortal(
     <dialog className="modal" ref={dialog} onClose={onClose}>
-      {children}
+      {/* 
+      open ? ... : 타이머가 항상 시작 부분에 바로 설정되지 않도록 작업
+      
+      */}
+      {open ? children : null}
     </dialog>,
     document.getElementById("modal")
   );
