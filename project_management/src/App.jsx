@@ -3,6 +3,7 @@ import NewProject from "./components/NewProject";
 import NoProjectSelected from "./components/NoProjectSelected";
 import { useState } from "react";
 import SelectedProject from "./components/SelectedProject";
+import Modal from "./components/Modal";
 
 function App() {
   const [projectsState, setProjectsState] = useState({
@@ -163,6 +164,12 @@ function App() {
         onCancle={handleCancleAddProject}
         projects={projectsState.projects} //projectsState.projects: 모든 프로젝트에 대한 배열(ProjectsSidebar 컴포넌트에 있는 project 속성으로 넘겨야함)
       />
+      <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
+        <DeleteConfirmation
+          onCancel={handleStopRemovePlace}
+          onConfirm={handleRemovePlace}
+        />
+      </Modal>
       {content}
     </main>
   );

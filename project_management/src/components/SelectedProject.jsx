@@ -1,8 +1,6 @@
+// src/components/SelectedProject.jsx
 import Tasks from "./Tasks";
 
-<<<<<<< HEAD
-export default function SelectedProject({ project, onDelete }) {
-=======
 export default function SelectedProject({
   project,
   onDelete,
@@ -10,15 +8,15 @@ export default function SelectedProject({
   onDeleteTask,
   tasks,
 }) {
->>>>>>> 24d2603 (태스크 관리 & Prop Drilling 이해하기)
   const formattedDate = new Date(project.dueDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
+
   return (
     <div className="w-[35rem] mt-16">
-      <header className="pd-4 mb-4 border-b-2 border-stone-300">
+      <header className="p-4 mb-4 border-b-2 border-stone-300">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-stone-600 mb-2">
             {project.title}
@@ -35,11 +33,7 @@ export default function SelectedProject({
           {project.description}
         </p>
       </header>
-<<<<<<< HEAD
-      <Tasks></Tasks>
-=======
-      <Tasks onAdd={onAddTask} onDelete={onDeleteTask} tasks={tasks}></Tasks>
->>>>>>> 24d2603 (태스크 관리 & Prop Drilling 이해하기)
+      <Tasks onAdd={onAddTask} onDelete={onDeleteTask} tasks={tasks} />
     </div>
   );
 }

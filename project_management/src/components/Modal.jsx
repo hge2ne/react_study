@@ -1,12 +1,23 @@
 //입력란 오류 모달 만들기
 //파일이름을 errorModal이 아닌 Modal 로 하는 이유? 재사용 가능
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Button from "./Button";
 
-const Modal = forwardRef(function Modal({ children, buttonCaption }, ref) {
+const Modal = forwardRef(function Modal(
+  { children, buttonCaption, onCLose, open },
+  ref
+) {
   // 주의! ref 위치: 1번째 prop{} 안x {} 밖 2번째 prop 위치에 있어야함
   const dialog = useRef();
+  useEffect(() => {
+    if (open) {
+      dialog.current.showModal();
+    } else {
+      dialog.current.showModal();
+    }
+  }, [open]);
+
   useImperativeHandle(ref, () => {
     return {
       open() {
@@ -14,6 +25,7 @@ const Modal = forwardRef(function Modal({ children, buttonCaption }, ref) {
       },
     };
   });
+
   return createPortal(
     <dialog
       ref={dialog}
