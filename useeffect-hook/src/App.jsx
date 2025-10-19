@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Places from "./components/Places.jsx";
 import { AVAILABLE_PLACES } from "./data.js";
 import Modal from "./components/Modal.jsx";
@@ -73,8 +73,15 @@ function App() {
         );
     });
   }
+  /**
+   * @useCallback : useCallback 으로 감싼 함수를 값으로 반환함. (주변 컴포넌트 함수가 재실행될때마다 렌더링되지 않도록 방지)
+   * - 값으로 반환하면서 메모리 내부에 저장 후, 해당 컴포넌트 함수가 다시 실행될때마다 저장된 함수 재사용함
+   * - useCallback 이 가지는 종속성 array는 useEffect의 종속성 array처럼 작동함
+   * => array에 함수 안에서 사용되는 prop 이나 state 값 등 추가하면 됨
+   * - 위 코드에서는 필요x (추가될 필요가 없는 state 업데이트 함수를 사용하고 있기 때문 + localStorage 등의 브라우저 함수 사용중 + 추가될 필요없는 JSON 객체 사용)
+   */
 
-  function handleRemovePlace() {
+  const handleRemovePlace = useCallback(function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
@@ -84,7 +91,7 @@ function App() {
       "selectedPlaces",
       JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current)) //id 일치하지않는 경우 삭제 항목 아님
     );
-  }
+  }, []); // useCallback 2번째 인자로 의존성 배열로 arr([])넣기
 
   return (
     <>
@@ -127,3 +134,12 @@ function App() {
 }
 
 export default App;
+
+/* 
+함수를 useEffect 의 종속성으로서 추가할 경우 왜 무한루프가 생길까?
+함수는 객체이기 때문에 값이 상태처럼 바뀐다. 의존성배열에 종속성으로 추가시, 변경될 때마다 재렌더링됨
+
+무한 루프 방지 방법 :  
+리액트 내장 hook "useCallback"(함수 재생성 방지)
+
+*/
