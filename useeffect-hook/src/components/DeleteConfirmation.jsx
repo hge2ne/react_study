@@ -23,7 +23,9 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
     DeleteConfirmation 컴포넌트가 사라지기 바로전(DOM에서 삭제되기 전) 실행됨
     (주의) 의존성 배열 설정하면 cleanup 함수 => Effect 함수가 다시 작동할 때 실행되고 cleanup함수는 그 직전인 Effect 함수가 작동하기 바로전에 실행됨
     */
-  }, []);
+  }, [onConfirm]); // 문제발생(함수를 의존성배열로 설정). 종속성으로 함수 추가할때는 무한루프발생가능성 있음. 이 코드에서는 발생 x(컴포넌트가 사라지도록 코딩했기 때문)
+  // 하지만 코딩 제대로 안해서 모달창 사라지는 코드 실행안되면 무한루프 발생함.
+
   /*
   사실 타이머 기능에는 Effect 기능 필요없음(무한루프 발생 x)
   해결해야할 문제 : 컴포넌트 함수가 사라질때 cleanup 함수로 타이머 내용 삭제하기
