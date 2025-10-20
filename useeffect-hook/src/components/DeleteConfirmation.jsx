@@ -4,25 +4,11 @@
 => App.jsx에서 작업
  */
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import ProgressBar from "./ProgressBar";
 
 const TIMER = 3000;
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
-  const [remainingTime, setRemainingTime] = useState(TIMER); // 매초 여러번 업데이트해야 부드러운 진행표시줄 만들수있음
-
-  /**
-   * @setInterval : 브라우저 내장요소
-   * - 함수를 정의하여 매 몇 밀리초마다 실행되도록 함
-   */
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRemainingTime((prevTime) => prevTime - 10);
-    }, 10);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   // useEffect 사용해서 Effect함수와 의존성 배열 넣기
   useEffect(() => {
     console.log("TIMER SET");
@@ -70,12 +56,12 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
           Yes
         </button>
       </div>
-      <progress value={remainingTime} max={TIMER} />
       {/* 
       내장 요소 progress 추가. 
       기능 : 모달 진행표시줄(남은 시간에 따라 표시줄이 줄어들면서 타이머 설정 및 만료 시 장소가 삭제될 예정이라고 알림)
       max={TIMER} : 3000 ms 가 진행 표시줄 상태의 최댓값이 됨
       */}
+      <ProgressBar timer={TIMER}></ProgressBar>
     </div>
   );
 }
