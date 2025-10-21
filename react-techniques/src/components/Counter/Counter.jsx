@@ -1,4 +1,12 @@
-import { useState, memo } from "react";
+import { useState, memo, useCallback } from "react";
+
+/* 
+useCallback 기능1. 함수 재생성 방지
+기능2. 함수를 useEffect의 의존성으로 갖고 있을 때
+기능3. memo() 사용할 때 불필요한 재실행 방지할 때
+
+
+*/
 
 import IconButton from "../UI/IconButton.jsx";
 import MinusIcon from "../UI/Icons/MinusIcon.jsx";
@@ -37,13 +45,13 @@ memo: (리액트 내장함수) 하는 일?
 
   const [counter, setCounter] = useState(initialCount);
 
-  function handleDecrement() {
+  const handleDecrement = useCallback(function handleDecrement() {
     setCounter((prevCounter) => prevCounter - 1);
-  }
+  }, []);
 
-  function handleIncrement() {
+  const handleIncrement = useCallback(function handleIncrement() {
     setCounter((prevCounter) => prevCounter + 1);
-  }
+  }, []);
 
   return (
     <section className="counter">
@@ -53,6 +61,9 @@ memo: (리액트 내장함수) 하는 일?
       </p>
       <p>
         <IconButton icon={MinusIcon} onClick={handleDecrement}>
+          {/* 
+          handleDecrement: (주의) Counter 컴포넌트 함수 내에서 생성되었으므로 "중첩함수"(함수 재실행될때마다 재생성됨)
+           */}
           Decrement
         </IconButton>
         <CounterOutput value={counter} />
