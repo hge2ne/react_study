@@ -1,10 +1,15 @@
-import { useState, memo, useCallback } from "react";
+import { useState, memo, useCallback, useMemo } from "react";
 
 /* 
 useCallback 기능1. 함수 재생성 방지
 기능2. 함수를 useEffect의 의존성으로 갖고 있을 때
 기능3. memo() 사용할 때 불필요한 재실행 방지할 때
+*/
 
+/* 
+useMemo 기능1. memo() 사용해서 컴포넌트 함수 재실행 방지할때 컴포넌트 함수 내에 불러온 일반함수를 감싸서 실행 방지해줌
+(주의) 복잡 계산 있을때만 사용
+- 빈 의존성 배열 있다면 절대 재실행 x
 
 */
 
@@ -41,7 +46,12 @@ memo: (리액트 내장함수) 하는 일?
 */
 
   log("<Counter /> rendered", 1);
-  const initialCountIsPrime = isPrime(initialCount);
+  const initialCountIsPrime = useMemo(
+    () => isPrime(initialCount),
+    [initialCount]
+  );
+  // Counter 함수 안에서 직접적으로 호출되어 실행되기 때문에 카운트 수가 바뀔때마다 실행됨
+  //isPrime(): initailCount 를 값으로 사용하고 있음. 'SetCounter' input에 입력 후 set 버튼 클릭할때만 변경됨
 
   const [counter, setCounter] = useState(initialCount);
 
