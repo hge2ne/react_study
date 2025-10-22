@@ -53,6 +53,11 @@ memo: (리액트 내장함수) 하는 일?
   // Counter 함수 안에서 직접적으로 호출되어 실행되기 때문에 카운트 수가 바뀔때마다 실행됨
   //isPrime(): initailCount 를 값으로 사용하고 있음. 'SetCounter' input에 입력 후 set 버튼 클릭할때만 변경됨
 
+  //useEffect(() => {
+  //setCounterChanges([{ value: initialCount, id: Math.random() * 1000 }]);
+  //}, [initialCount]);
+  //useEffect : input 입력값으로 카운터 설정하는 기능
+
   //const [counter, setCounter] = useState(initialCount);
   const [counterChanges, setCounterChanges] = useState([
     { value: initialCount, id: Math.random() * 1000 },
@@ -74,7 +79,6 @@ memo: (리액트 내장함수) 하는 일?
   const handleIncrement = useCallback(function handleIncrement() {
     //setCounter((prevCounter) => prevCounter + 1);
     setCounterChanges((prevCounterChanges) => [
-
       { value: 1, id: Math.random() * 1000 },
       ...prevCounterChanges,
     ]);
