@@ -1,5 +1,5 @@
 import { useState, memo, useCallback, useMemo } from "react";
-
+import CounterHistory from "../Counter/CounterHistory.jsx";
 /* 
 useCallback 기능1. 함수 재생성 방지
 기능2. 함수를 useEffect의 의존성으로 갖고 있을 때
@@ -53,14 +53,31 @@ memo: (리액트 내장함수) 하는 일?
   // Counter 함수 안에서 직접적으로 호출되어 실행되기 때문에 카운트 수가 바뀔때마다 실행됨
   //isPrime(): initailCount 를 값으로 사용하고 있음. 'SetCounter' input에 입력 후 set 버튼 클릭할때만 변경됨
 
-  const [counter, setCounter] = useState(initialCount);
+  //const [counter, setCounter] = useState(initialCount);
+  const [counterChanges, setCounterChanges] = useState([
+    { value: initialCount, id: Math.random() * 1000 },
+  ]);
+
+  const currentCounter = counterChanges.reduce(
+    (prevCounter, counterChange) => prevCounter + counterChange.value,
+    0
+  );
 
   const handleDecrement = useCallback(function handleDecrement() {
-    setCounter((prevCounter) => prevCounter - 1);
+    //setCounter((prevCounter) => prevCounter - 1);
+    setCounterChanges((prevCounterChanges) => [
+      { value: -1, id: Math.random() * 1000 },
+      ...prevCounterChanges,
+    ]);
   }, []);
 
   const handleIncrement = useCallback(function handleIncrement() {
-    setCounter((prevCounter) => prevCounter + 1);
+    //setCounter((prevCounter) => prevCounter + 1);
+    setCounterChanges((prevCounterChanges) => [
+
+      { value: 1, id: Math.random() * 1000 },
+      ...prevCounterChanges,
+    ]);
   }, []);
 
   return (
@@ -76,11 +93,12 @@ memo: (리액트 내장함수) 하는 일?
            */}
           Decrement
         </IconButton>
-        <CounterOutput value={counter} />
+        <CounterOutput value={currentCounter} />
         <IconButton icon={PlusIcon} onClick={handleIncrement}>
           Increment
         </IconButton>
       </p>
+      <CounterHistory history={counterChanges} />
     </section>
   );
 });
