@@ -2,6 +2,7 @@ import Places from "./Places.jsx";
 import { useState, useEffect } from "react";
 import ErrorPage from "./Error.jsx";
 import { sortPlacesByDistance } from "../loc.js";
+import { fetchAvailablePlaces } from "../http.js";
 
 export default function AvailablePlaces({ onSelectPlace }) {
   const [availablePlaces, setAvailablePlaces] = useState([]);
@@ -12,23 +13,14 @@ export default function AvailablePlaces({ onSelectPlace }) {
     setIsFetching(true); // true인 이유? places를 가져오기 시작하기 때문
     async function fetchPlaces() {
       try {
-        //async 추가(개발자가 정의한 함수이기 때문에 리액트가 사용하려면 추가해야함)
-        const response = await fetch("http://localhost:3000/places");
-        const resData = await response.json();
-        /* 
-react 에서 에러 다루기 => UI 업데이트(에러 메세지 띄움) 하는 것
-http 요청 에러 해결방법 : try/catch 문 사용(async/await 에만 사용 가능)
-try : 실패할 수 있는 코드를 {} 로 감쌈
-catch : error를 props 로 넣고 에러 발생했을 때 실행할 코드는 {}에 정의
-*/
-        if (!response.ok) {
-          throw new ErrorPage("Failed to fetch places");
-        }
+        //유틸함수로 빼둔 코드를 await 사용 + 상수 선언해서 navigator 안에서 사용
+        const places = await fetchAvailablePlaces(); // => http 요청을 보내는 실질적인 코드
 
         navigator.geolocation.getCurrentPosition((position) => {
           //위 코드에 async,await 사용 불가(getCurrentPositiondms promise를 반환하지 않음)
           const sortedPlaces = sortPlacesByDistance(
-            resData.places,
+            places, // resData.places 대신 사용
+            //resData.places,
             position.coords.latitude, //위도
             position.coords.longitude //경도
           );
