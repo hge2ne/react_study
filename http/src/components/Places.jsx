@@ -10,6 +10,9 @@ export default function Places({ title, places, fallbackText, onSelectPlace }) {
             <li key={place.id} className="place-item">
               <button onClick={() => onSelectPlace(place)}>
                 <img src={`http://localhost:3000/${place.image.src}`} alt={place.image.alt} />
+                {/* 
+                백틱기호로 감싼 src 속성 : 백엔드에 img 파일 요청 보냄(GET 요청, fetching 이라고도 함)
+                */}
                 <h3>{place.title}</h3>
               </button>
             </li>
