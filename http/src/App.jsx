@@ -1,11 +1,11 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 import Places from "./components/Places.jsx";
 import Modal from "./components/Modal.jsx";
 import DeleteConfirmation from "./components/DeleteConfirmation.jsx";
 import logoImg from "./assets/logo.png";
 import AvailablePlaces from "./components/AvailablePlaces.jsx";
-import { updateUserPlaces } from "./http.js";
+import { fetchUserPlaces, updateUserPlaces } from "./http.js";
 import Error from "./components/Error.jsx";
 
 function App() {
@@ -14,6 +14,21 @@ function App() {
   //userPlaces : 장소를 선택할때마다 업데이트되는 장소 배열
   const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState(); //처음엔 빈배열이었다가 장소에 문제가 생겼을 때만 업데이트 됨
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isFetching, setIsFetching] = useState(false); //초기값 false 설정. useEffect 함수 내에선 True 로 설정
+  const [error, setError] = useState(); //error : 에러메세지 화면에 띄우는 역할
+
+  useEffect(() => {
+    async function fetchPlaces() {
+      setIsFetching(true);
+      try {
+        const places = await fetchUserPlaeces();
+        setUserPlaces(places);
+      } catch (error) {
+        setError({ message: error.message || "Failed to fetch user places." });
+      }
+      setIsFetching(false); //(주의) try catch 후 1회만 실행
+    }
+  }, []);
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -125,12 +140,21 @@ function App() {
         </p>
       </header>
       <main>
-        <Places
-          title="I'd like to visit ..."
-          fallbackText="Select the places you would like to visit below."
-          places={userPlaces}
-          onSelectPlace={handleStartRemovePlace}
-        />
+        {/* 
+        {error} : 에러 발생시 실행
+        {!error} : 에러 발생x 시 실행
+        */}
+        {error && <Error title="An error occurred!" message={error.message} />}
+        {!error && (
+          <Places
+            title="I'd like to visit ..."
+            fallbackText="Select the places you would like to visit below."
+            isLoading={isFetching}
+            ladingText="Fetching your places..."
+            places={userPlaces}
+            onSelectPlace={handleStartRemovePlace}
+          />
+        )}
 
         <AvailablePlaces onSelectPlace={handleSelectPlace} />
       </main>

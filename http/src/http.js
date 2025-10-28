@@ -13,6 +13,18 @@ catch : error를 props 로 넣고 에러 발생했을 때 실행할 코드는 {}
   }
   return resData.places;
 }
+
+//백엔드에서 데이터 받아오기
+export async function fetchUserPlaces() {
+  const response = await fetch("http://localhost:3000/user-places");
+  const resData = await response.json();
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch user places");
+  }
+  return resData.places;
+}
+
 export async function updateUserPlaces(places) {
   const response = await fetch("http://localhost:3000/user-places", {
     method: "PUT", //method 라는 속성을 정의
