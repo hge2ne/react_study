@@ -7,7 +7,7 @@ export function useFetch(fetchFn, initialValue) {
 
   useEffect(() => {
     async function fetchData() {
-      setIsFetching(true);
+      setIsFetching(true); // 상태값 업데이트 못함(상태값은 useFetch가 관리하기 때문)
       try {
         const data = await fetchFn(); //fetchFn 실행시킴(useFetch()를 모든 fetchFn에서 사용 가능 )
         setFetchedData(data);
@@ -25,6 +25,7 @@ export function useFetch(fetchFn, initialValue) {
     //{} 사용하면 여러 값 반환 가능
     isFetching,
     fetchedData,
+    setFetchedData, //커스텀 훅에서 상태업데이트함수 포인터 노출(업데이트함수를 외부에서 호출가능하도록 내보낸다는 뜻)
     error,
   };
 }
