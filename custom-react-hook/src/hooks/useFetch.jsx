@@ -1,22 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-function useFetch() {
+export function useFetch(fetchFn, initialValue) {
+  const [isFetching, setIsFetching] = useState();
+  const [error, setError] = useState();
+  const [fetchedData, setFetchedData] = useState(initialValue);
+
   useEffect(() => {
-    async function fetchPlaces() {
+    async function fetchData() {
       setIsFetching(true);
       try {
-        const places = await fetchUserPlaces();
-        setUserPlaces(places);
+        const data = await fetchFn(); //fetchFn 실행시킴(useFetch()를 모든 fetchFn에서 사용 가능 )
+        setFetchedData(data);
       } catch (error) {
-        setError({ message: error.message || "Failed to fetch user places." });
+        setError({ message: error.message || "Failed to fetch data." });
       }
 
       setIsFetching(false);
     }
 
-    fetchPlaces();
-  }, []);
+    fetchData();
+  }, [fetchFn]);
+
+  return {
+    //{} 사용하면 여러 값 반환 가능
+    isFetching,
+    fetchedData,
+    error,
+  };
 }
+
 /* 
 - use 로 시작하는 함수 : hook을 의미함. 작명 규칙
 (규칙 안지키면 작동하지 않음)

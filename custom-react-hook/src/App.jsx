@@ -7,20 +7,16 @@ import logoImg from "./assets/logo.png";
 import AvailablePlaces from "./components/AvailablePlaces.jsx";
 import { fetchUserPlaces, updateUserPlaces } from "./http.js";
 import Error from "./components/Error.jsx";
+import { useFetch } from "./hooks/useFetch.jsx";
 
 function App() {
   const selectedPlace = useRef();
-
-  const [userPlaces, setUserPlaces] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState();
-
   const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState();
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const { isFetching, error, fetchedData } = useFetch(fetchUserPlaces, []);
+  // 위 코드 : 구조분해할당
+  // (중요) 이 useFetch() : http 요청을 보내는 코드 가지고 있음
   //커스텀 훅 사용
-  useFetch();
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -31,7 +27,7 @@ function App() {
     setModalIsOpen(false);
   }
 
-  async function handleSelectPlace(selectedPlace) {
+  /* async function handleSelectPlace(selectedPlace) {
     // await updateUserPlaces([selectedPlace, ...userPlaces]);
 
     setUserPlaces((prevPickedPlaces) => {
@@ -76,7 +72,7 @@ function App() {
       setModalIsOpen(false);
     },
     [userPlaces]
-  );
+  ); */
 
   function handleError() {
     setErrorUpdatingPlaces(null);
@@ -97,7 +93,7 @@ function App() {
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
-          onConfirm={handleRemovePlace}
+          //onConfirm={handleRemovePlace}
         />
       </Modal>
 
@@ -117,12 +113,14 @@ function App() {
             fallbackText="Select the places you would like to visit below."
             isLoading={isFetching}
             loadingText="Fetching your places..."
-            places={userPlaces}
+            places={fetchedData}
             onSelectPlace={handleStartRemovePlace}
           />
         )}
 
-        <AvailablePlaces onSelectPlace={handleSelectPlace} />
+        <AvailablePlaces
+        //onSelectPlace={handleSelectPlace}
+        />
       </main>
     </>
   );
