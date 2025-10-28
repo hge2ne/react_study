@@ -48,14 +48,40 @@ function App() {
       });
     }
   }
+  /**
+   * @handleRemovePlace : 유저가 선택한 장소 삭제하는 함수
+   */
+  const handleRemovePlace = useCallback(
+    async function handleRemovePlace() {
+      setUserPlaces((prevPickedPlaces) =>
+        prevPickedPlaces.filter(
+          (place) => place.id !== selectedPlace.current.id
+        )
+      );
+      /* 
+    유저가 선택한 장소 삭제 요청 보내기
+    1. 상태 업데이트하기
+    2. await 추가
+    3. userPlaces 상태를 handleRemovePlace 안에서 사용하고 있기 때문에 useCallback 의존성 배열에 추가
+    (주의) 업데이트된 place 배열을 백엔드로 보내기 위해 가장 중요한 것 : 의존성배열로 추가한 userPlaces 가 변경되면 useCallback 함수가 반드시 재생성 되어야함
+    - 정상 작동을 위해 try/catch 문 사용
+    
+    */
 
-  const handleRemovePlace = useCallback(async function handleRemovePlace() {
-    setUserPlaces((prevPickedPlaces) =>
-      prevPickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
-    );
-
-    setModalIsOpen(false);
-  }, []);
+      try {
+        await updateUserPlaces(
+          userPlaces.filter((place) => place.id !== selectedPlace.current.id)
+        );
+      } catch (error) {
+        setUserPlaces(userPlaces); //에러 발생시 복구했을 때, 업데이트도기 전 정보를 사용
+        setErrorUpdatingPlaces({
+          message: error.message || "Failed to delete place.",
+        });
+      }
+      setModalIsOpen(false);
+    },
+    [userPlaces]
+  );
 
   /**
    * @handleError : 에러 모달창 닫을 수 있도록 기능
